@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>接种公告 · 佛山</title>
+<meta name="description" content="汇总展示佛山市疫苗接种门诊公开公告，并提供更新时间与原文内容。">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#098c7a">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script>window.APP_BUILD = "2026-11-08";</script>
+<script>
+// 门诊数据（clinics.js 为 ES Module，这里用动态 import 载入，兼容 file:// 与 minis://）
+(function () {
+  function ready(d) {
+    window.__VACCINE_DATA__ = d;
+    window.dispatchEvent(new Event('vaccine-data-ready'));
+  }
+  // 打包版（clinic-data.js）会先把数据挂到 window.__VACCINE_DATA__，此时无需再加载模块
+  if (window.__VACCINE_DATA__) { ready(window.__VACCINE_DATA__); return; }
+  import('./clinics.js').then(function (m) { ready({ REGIONS: m.REGIONS, CLINICS: m.CLINICS }); })
+    .catch(function (e) {
+      console.error(e);
+      document.getElementById('main').innerHTML = '<main class="content empty-view"><div class="empty-symbol">!</div><h1>数据未加载</h1><p>请确认 clinics.js 与 index.html 在同一目录。</p></main>';
+    });
+})();
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="root">
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="menu-button" aria-label="打开站点菜单">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="brand"><span class="brand-mark"><span>苗</span></span><span>接种公告</span></div>
+      <div class="refresh-meta"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.6 2.6L16.5 9"/></svg><span>上次成功刷新：—</span></div>
+      <button class="refresh-button"><span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"/></svg></span>刷新公告</button>
+    </header>
+    <div class="app-body">
+      <button class="nav-scrim" aria-label="关闭站点菜单"></button>
+      <aside class="station-nav">
+        <div class="station-nav-title"><span>接种门诊选择</span><button aria-label="关闭站点菜单"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+        <nav aria-label="接种门诊" id="station-list"></nav>
+        <div class="nav-note"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>公告由门诊维护，库存和接种安排请以现场告知为准。</span></div>
+      </aside>
+      <main class="content loading-view" id="main">
+        <div class="loading-line wide"></div>
+        <div class="loading-line medium"></div>
+        <div class="loading-panel"></div>
+        <div class="loading-document"></div>
+      </main>
+    </div>
+    <footer>非官方汇总页面，仅用于便捷查看公开公告，不替代门诊专业意见或现场安排。</footer>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
